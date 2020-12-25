@@ -1,4 +1,4 @@
-# fa20-proj2-starter
+# sp21-proj2-starter
 
 ```
 .
