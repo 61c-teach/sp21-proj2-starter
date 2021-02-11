@@ -122,6 +122,7 @@ class AssemblyTest:
     def __init__(self, test: unittest.TestCase, assembly: str, check_calling_convention: bool = True, no_utils: bool = False):
         self.name = _test_id_to_name(test)
         self._test = test
+        self._has_executed = False
         self.data: List[str] = []
         self._checks: List[str] = []
         self._args: List[str] = []
@@ -215,6 +216,8 @@ class AssemblyTest:
         """ checks the the value of register """
         assert self._call is not None, f"You must first call a function before checking its return values!"
         assert isinstance(value, int), f"{value} is a {type(value)}, expected an int!"
+        """ Checks that when this function is called, we have not already assembled and run the test. """
+        assert not self._has_executed, f"Test has already been assembled and run!"
         exit_code = 8
         saved_register = self._parse_register(register)
         lbl = self._make_lbl(f"{register}_eq_{value}")
@@ -236,6 +239,8 @@ class AssemblyTest:
     def check_array(self, array: ArrayData, value: List[int]):
         """ checks the the value of an array in memory """
         assert self._call is not None, f"You must first call a function before checking its return values!"
+        """ Checks that when this function is called, we have not already assembled and run the test. """
+        assert not self._has_executed, f"Test has already been assembled and run!"
         assert len(value) > 0, "Array to compare against has to contain at least one element."
         assert len(value) <= len(array), "Array to compare against must contain a smaller or equal amount of elements."
         expected = self.array(value).name
@@ -245,6 +250,8 @@ class AssemblyTest:
     def check_array_pointer(self, register: str, value: List[int]):
         """ check the memory region pointed to by the register content """
         assert self._call is not None, f"You must first call a function before checking its return values!"
+        """ Checks that when this function is called, we have not already assembled and run the test. """
+        assert not self._has_executed, f"Test has already been assembled and run!"
         assert len(value) > 0, "Array to compare against has to contain at least one element."
         saved_register = self._parse_register(register)
         array_name = f"array pointed to by {register}"
@@ -300,6 +307,9 @@ class AssemblyTest:
     def execute(self, code: int = 0, args: Optional[List[str]] = None, fail: str = "", verbose: bool = False):
         """ Assembles the test and runs it through the venus simulator. """
         assert fail in AssemblyTest._can_fail, f"Invalid fail={fail}. Can only fail: {list(AssemblyTest._can_fail)}"
+
+        """ As soon as this function is called, the AssemblyTest is considered "executed" for the duration of the life cycle of this test and should be treated as such. """
+        self._has_executed = True
 
         # turn function to fail into a define
         if len(fail) == 0:
