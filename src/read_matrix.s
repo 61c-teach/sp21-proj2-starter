@@ -16,13 +16,13 @@
 #   a0 (int*)  is the pointer to the matrix in memory
 # Exceptions:
 # - If malloc returns an error,
-#   this function terminates the program with error code 88.
+#   this function terminates the program with error code 116.
 # - If you receive an fopen error or eof, 
-#   this function terminates the program with error code 90.
+#   this function terminates the program with error code 117.
 # - If you receive an fread error or eof,
-#   this function terminates the program with error code 91.
+#   this function terminates the program with error code 118.
 # - If you receive an fclose error or eof,
-#   this function terminates the program with error code 92.
+#   this function terminates the program with error code 119.
 # ==============================================================================
 read_matrix:
 

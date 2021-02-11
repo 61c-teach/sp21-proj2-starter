@@ -17,11 +17,11 @@
 # Exceptions:
 #   Make sure to check in top to bottom order!
 #   - If the dimensions of m0 do not make sense,
-#     this function terminates the program with exit code 72.
+#     this function terminates the program with exit code 125.
 #   - If the dimensions of m1 do not make sense,
-#     this function terminates the program with exit code 73.
+#     this function terminates the program with exit code 126.
 #   - If the dimensions of m0 and m1 don't match,
-#     this function terminates the program with exit code 74.
+#     this function terminates the program with exit code 127.
 # =======================================================
 matmul:
 

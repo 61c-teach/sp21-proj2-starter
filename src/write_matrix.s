@@ -16,11 +16,11 @@
 #   None
 # Exceptions:
 # - If you receive an fopen error or eof,
-#   this function terminates the program with error code 93.
+#   this function terminates the program with error code 112.
 # - If you receive an fwrite error or eof,
-#   this function terminates the program with error code 94.
+#   this function terminates the program with error code 113.
 # - If you receive an fclose error or eof,
-#   this function terminates the program with error code 95.
+#   this function terminates the program with error code 114.
 # ==============================================================================
 write_matrix:
 

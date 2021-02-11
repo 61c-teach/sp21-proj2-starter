@@ -10,7 +10,7 @@
 #	None
 # Exceptions:
 # - If the length of the vector is less than 1,
-#   this function terminates the program with error code 78.
+#   this function terminates the program with error code 115.
 # ==============================================================================
 relu:
     # Prologue

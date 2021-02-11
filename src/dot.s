@@ -13,9 +13,9 @@
 #   a0 (int)  is the dot product of v0 and v1
 # Exceptions:
 # - If the length of the vector is less than 1,
-#   this function terminates the program with error code 75.
+#   this function terminates the program with error code 123.
 # - If the stride of either vector is less than 1,
-#   this function terminates the program with error code 76.
+#   this function terminates the program with error code 124.
 # =======================================================
 dot:
 

@@ -15,8 +15,8 @@ classify:
     #   a0 (int)    Classification
     # Exceptions:
     # - If there are an incorrect number of command line args,
-    #   this function terminates the program with exit code 89.
-    # - If malloc fails, this function terminats the program with exit code 88.
+    #   this function terminates the program with exit code 121.
+    # - If malloc fails, this function terminats the program with exit code 122.
     #
     # Usage:
     #   main.s <M0_PATH> <M1_PATH> <INPUT_PATH> <OUTPUT_PATH>

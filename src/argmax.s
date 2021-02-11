@@ -12,7 +12,7 @@
 #	a0 (int)  is the first index of the largest element
 # Exceptions:
 # - If the length of the vector is less than 1,
-#   this function terminates the program with error code 77.
+#   this function terminates the program with error code 120.
 # =================================================================
 argmax:
 
