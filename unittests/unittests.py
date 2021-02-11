@@ -220,17 +220,41 @@ class TestClassify(TestCase):
         print_coverage("classify.s", verbose=False)
 
 
+# The following are some simple sanity checks:
+import subprocess, pathlib, os
+script_dir = pathlib.Path(os.path.dirname(__file__)).resolve()
+
+def compare_files(test, actual, expected):
+    assert os.path.isfile(expected), f"Reference file {expected} does not exist!"
+    test.assertTrue(os.path.isfile(actual), f"It seems like the program never created the output file {actual}!")
+    # open and compare the files
+    with open(actual, 'rb') as a:
+        actual_bin = a.read()
+    with open(expected, 'rb') as e:
+        expected_bin = e.read()
+    test.assertEqual(actual_bin, expected_bin, f"Bytes of {actual} and {expected} did not match!")
+
 class TestMain(TestCase):
+    """ This sanity check executes src/main.S using venus and verifies the stdout and the file that is generated.
+    """
+
+    def run_venus(self, args):
+        venus_jar = pathlib.Path('../sp21-tools') / 'venus.jar'
+        cmd = ['java', '-jar', venus_jar, '--immutableText', '--maxsteps', '-1', '--callingConvention'] + args
+        #run venus from the project root directory
+        r = subprocess.run(cmd, stdout=subprocess.PIPE, cwd=script_dir / '..')
+        return r.returncode, r.stdout.decode('utf-8').strip()
 
     def run_main(self, inputs, output_id, label):
         args = [f"{inputs}/m0.bin", f"{inputs}/m1.bin", f"{inputs}/inputs/input0.bin",
                 f"outputs/test_basic_main/student{output_id}.bin"]
         reference = f"outputs/test_basic_main/reference{output_id}.bin"
-        t = AssemblyTest(self, "main.s", no_utils=True)
-        t.call("main")
-        t.execute(args=args, verbose=False)
-        t.check_stdout(label)
-        t.check_file_output(args[-1], reference)
+        
+        code, stdout = self.run_venus(["src/main.S"] + args)
+        self.assertEqual(code, 0, stdout)
+        self.assertEqual(stdout, lbl)
+
+        compare_files(self, actual=script_dir / '..' / args[-1], expected=script_dir / '..' / reference)
 
     def test0(self):
         self.run_main("inputs/simple0/bin", "0", "2")
