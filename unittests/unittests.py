@@ -239,7 +239,6 @@ class TestMain(TestCase):
     """
 
     def run_venus(self, args):
-        venus_jar = pathlib.Path('../sp21-tools') / 'venus.jar'
         cmd = ['../../tools/venus', '--immutableText', '--maxsteps', '-1', '--callingConvention'] + args
         env_vars = {"CS61C_TOOLS_ARGS": "-q"}
         #run venus from the project root directory
