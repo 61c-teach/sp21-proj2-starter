@@ -240,9 +240,10 @@ class TestMain(TestCase):
 
     def run_venus(self, args):
         venus_jar = pathlib.Path('../sp21-tools') / 'venus.jar'
-        cmd = ['java', '-jar', venus_jar, '--immutableText', '--maxsteps', '-1', '--callingConvention'] + args
+        cmd = ['../../tools/venus', '--immutableText', '--maxsteps', '-1', '--callingConvention'] + args
+        env_vars = {"CS61C_TOOLS_ARGS": "-q"}
         #run venus from the project root directory
-        r = subprocess.run(cmd, stdout=subprocess.PIPE, cwd=script_dir / '..')
+        r = subprocess.run(cmd, stdout=subprocess.PIPE, cwd=script_dir / '..', env=env_vars)
         return r.returncode, r.stdout.decode('utf-8').strip()
 
     def run_main(self, inputs, output_id, label):
