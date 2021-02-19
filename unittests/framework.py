@@ -18,7 +18,8 @@ assert _venus_path.is_file(), f"Could not find venus loader at {_venus_path}"
 # --immutableText: immutable text, ensures that code cannot be modified
 # --maxsteps -1: no upper bound on the number of cycles
 _venus_default_args = ['--immutableText', '--maxsteps', '-1']
-_venus_env = {"CS61C_TOOLS_ARGS": "-q"}
+_venus_env = os.environ.copy()
+_venus_env["CS61C_TOOLS_ARGS"] = _venus_env.get("CS61C_TOOLS_ARGS", "") + "-q"
 
 def run_raw_venus(check_calling_convention: bool = True, extra_flags: Optional[List[str]] = None, args: List[str] = None, verbose: bool = False):
     cmd = [_python_bin_path, _venus_path] + _venus_default_args
