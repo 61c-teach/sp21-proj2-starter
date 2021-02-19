@@ -52,7 +52,7 @@ def run_venus(filename: str, check_calling_convention: bool = True, extra_flags:
             with open(coverage_file) as c:
                 coverage = c.read()
         except FileNotFoundError:
-            if verbose: print(f"Could nto find the coverage file `{coverage_file}`!")
+            if verbose: print(f"Could not find the coverage file `{coverage_file}`!")
             coverage = ""
     return r, coverage
 
@@ -62,13 +62,15 @@ _global_coverage = defaultdict(lambda: defaultdict(lambda : 0))
 
 def _process_coverage(coverage: str, file_filter: str):
     for line in coverage.split('\n'):
-        if len(line.strip()) == 0: continue
-        p = line.strip().split(' ')
-        assert len(p) == 3, f"Unexpected coverage line {line}. Do you have a space in the filename or path?"
-        import_path, line = p[1].split(':')
+        line = line.strip()
+        if len(line) == 0: continue
+        # space-separated output but paths can have spaces...
+        addr, rem = line.split(' ', 1)
+        path, cov_value = rem.rsplit(' ', 1)
+        import_path, line_num = path.rsplit(':', 1)
         filename = os.path.basename(import_path)
         if filename != file_filter: continue
-        _global_coverage[filename][int(line)] += int(p[2])
+        _global_coverage[filename][int(line_num)] += int(cov_value)
 
 def print_coverage(filename: str, verbose: bool = True):
     if filename not in _global_coverage:
