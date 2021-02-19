@@ -21,15 +21,17 @@ _venus_default_args = ['--immutableText', '--maxsteps', '-1']
 _venus_env = os.environ.copy()
 _venus_env["CS61C_TOOLS_ARGS"] = _venus_env.get("CS61C_TOOLS_ARGS", "") + "-q"
 
-def run_raw_venus(check_calling_convention: bool = True, extra_flags: Optional[List[str]] = None, args: List[str] = None, verbose: bool = False):
-    cmd = [_python_bin_path, _venus_path] + _venus_default_args
+def run_raw_venus(check_calling_convention: bool = True, extra_flags: Optional[List[str]] = None, args: Optional[List[str]] = None, verbose: bool = False):
+    cmd = [_python_bin_path, str(_venus_path)] + _venus_default_args
     if check_calling_convention:
         cmd += ['--callingConvention']
     if extra_flags:
         cmd += extra_flags
     if args is not None:
         cmd += args
-    if verbose: print("Executing: " + " ".join(str(c) for c in cmd))
+    # Windows + Python <3.8 bug: https://bugs.python.org/issue33617
+    cmd = [str(arg) for arg in cmd]
+    if verbose: print("Executing: " + " ".join(cmd))
     # print(" ".join((str(c) for c in cmd)))
     r = subprocess.run(cmd, cwd=_root_dir, env=_venus_env, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return r
@@ -40,9 +42,9 @@ def run_venus(filename: str, check_calling_convention: bool = True, extra_flags:
 
     with tempfile.TemporaryDirectory() as tmp_dir:
         coverage_file = Path(tmp_dir) / 'coverage'
-        final_flags =  ['--coverageFile', coverage_file.absolute()]
+        final_flags =  ['--coverageFile', str(coverage_file.absolute())]
         if extra_flags is not None: final_flags += extra_flags
-        final_args = [filename]
+        final_args = [str(filename)]
         if args is not None: final_args += args
         r = run_raw_venus(check_calling_convention=check_calling_convention,
                           extra_flags=final_flags, args=final_args, verbose=verbose)
