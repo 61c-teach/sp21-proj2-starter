@@ -239,7 +239,7 @@ class TestMain(TestCase):
     """
 
     def run_main(self, inputs, output_id, label):
-        args = ["src/main.S", f"{inputs}/m0.bin", f"{inputs}/m1.bin",
+        args = [f"{inputs}/m0.bin", f"{inputs}/m1.bin",
                 f"{inputs}/inputs/input0.bin",
                 f"outputs/test_basic_main/student{output_id}.bin"]
         reference = f"outputs/test_basic_main/reference{output_id}.bin"
